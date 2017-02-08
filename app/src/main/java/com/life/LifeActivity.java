@@ -14,7 +14,7 @@ import butterknife.ButterKnife;
 
 public class LifeActivity extends AppCompatActivity {
 
-    private static final int CELL_SIZE = 100;
+    private static final int CELL_SIZE = 50;
 
     @BindView(R.id.grid_layout)
     GridLayout gridLayout;
@@ -33,20 +33,22 @@ public class LifeActivity extends AppCompatActivity {
         gridLayout.setRowCount(rowCount);
 
         for (int cellColumnPosition = 0; cellColumnPosition < columnCount; cellColumnPosition++) {
-            ImageView imageView = new ImageView(this);
-            imageView.setBackgroundColor(ContextCompat.getColor(this,
-                    android.R.color.holo_green_light));
+            for (int cellRowPosition = 0; cellRowPosition < rowCount; cellRowPosition++) {
+                ImageView imageView = new ImageView(this);
+                imageView.setBackgroundColor(ContextCompat.getColor(this,
+                        android.R.color.holo_green_light));
 
-            GridLayout.LayoutParams params = new GridLayout.LayoutParams();
-            params.height = CELL_SIZE;
-            params.width = CELL_SIZE;
-            params.leftMargin = 2;
-            params.rightMargin = 2;
-            params.topMargin = 2;
-            params.bottomMargin = 2;
-            imageView.setLayoutParams(params);
+                GridLayout.LayoutParams params = new GridLayout.LayoutParams();
+                params.height = CELL_SIZE;
+                params.width = CELL_SIZE;
+                params.leftMargin = 2;
+                params.rightMargin = 2;
+                params.topMargin = 2;
+                params.bottomMargin = 2;
+                imageView.setLayoutParams(params);
 
-            gridLayout.addView(imageView);
+                gridLayout.addView(imageView);
+            }
         }
     }
 
