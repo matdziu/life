@@ -2,6 +2,7 @@ package com.life;
 
 import android.graphics.Point;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Display;
@@ -14,6 +15,7 @@ import butterknife.ButterKnife;
 public class LifeActivity extends AppCompatActivity {
 
     private static final int CELL_SIZE = 50;
+    private static final long ANIMATION_DELAY = 1000;
 
     private int rowCount;
     private int columnCount;
@@ -92,11 +94,22 @@ public class LifeActivity extends AppCompatActivity {
     }
 
     private void animate() {
-        for (int cellRowPosition = 0; cellRowPosition < rowCount; cellRowPosition++) {
-            for (int cellColumnPosition = 0; cellColumnPosition < columnCount; cellColumnPosition++) {
-                gridLayout.addView(cellMatrix[cellRowPosition][cellColumnPosition].getImageView());
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                for (int cellRowPosition = 0; cellRowPosition < rowCount; cellRowPosition++) {
+                    for (int cellColumnPosition = 0; cellColumnPosition < columnCount; cellColumnPosition++) {
+                        if (decide(cellRowPosition, cellColumnPosition)) {
+                            cellMatrix[cellRowPosition][cellColumnPosition].alive();
+                        } else {
+                            cellMatrix[cellRowPosition][cellColumnPosition].dead();
+                        }
+                        gridLayout.addView(cellMatrix[cellRowPosition][cellColumnPosition].getImageView());
+                    }
+                }
             }
-        }
+        }, ANIMATION_DELAY);
     }
 
     private boolean decide(int rowPosition, int columnPosition) {
