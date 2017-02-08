@@ -15,6 +15,8 @@ public class LifeActivity extends AppCompatActivity {
 
     private static final int CELL_SIZE = 50;
 
+    private Cell[][] cellMatrix;
+
     @BindView(R.id.grid_layout)
     GridLayout gridLayout;
 
@@ -25,16 +27,16 @@ public class LifeActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         Point size = getDisplaySize();
-        int columnCount = size.x / CELL_SIZE;
         int rowCount = size.y / CELL_SIZE;
+        int columnCount = size.x / CELL_SIZE;
 
-        Cell[][] cellMatrix = new Cell[columnCount][rowCount];
+        cellMatrix = new Cell[rowCount][columnCount];
 
         gridLayout.setColumnCount(columnCount);
         gridLayout.setRowCount(rowCount);
 
-        for (int cellColumnPosition = 0; cellColumnPosition < columnCount; cellColumnPosition++) {
-            for (int cellRowPosition = 0; cellRowPosition < rowCount; cellRowPosition++) {
+        for (int cellRowPosition = 0; cellRowPosition < rowCount; cellRowPosition++) {
+            for (int cellColumnPosition = 0; cellColumnPosition < columnCount; cellColumnPosition++) {
                 ImageView imageView = new ImageView(this);
                 GridLayout.LayoutParams params = new GridLayout.LayoutParams();
                 params.height = CELL_SIZE;
@@ -49,7 +51,7 @@ public class LifeActivity extends AppCompatActivity {
                 cell.create();
 
                 gridLayout.addView(imageView);
-                cellMatrix[cellColumnPosition][cellRowPosition] = cell;
+                cellMatrix[cellRowPosition][cellColumnPosition] = cell;
             }
         }
     }
