@@ -46,8 +46,8 @@ public class LifeActivity extends AppCompatActivity {
         gridLayout.setColumnCount(columnCount);
         gridLayout.setRowCount(rowCount);
 
-        initCellMatrix();
-        animate();
+        initState();
+//        animate();
     }
 
     private Point getDisplaySize() {
@@ -70,7 +70,7 @@ public class LifeActivity extends AppCompatActivity {
         return new Cell(imageView);
     }
 
-    private void initCellMatrix() {
+    private void initState() {
         int middleRow = rowCount / 2;
         int middleColumn = columnCount / 2;
         for (int cellRowPosition = 0; cellRowPosition < rowCount; cellRowPosition++) {
@@ -95,6 +95,8 @@ public class LifeActivity extends AppCompatActivity {
                 if (cellRowPosition == middleRow + 1 && cellColumnPosition == middleColumn - 2) {
                     cell.alive();
                 }
+
+                gridLayout.addView(cellMatrix[cellRowPosition][cellColumnPosition].getImageView());
             }
         }
     }
