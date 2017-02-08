@@ -14,6 +14,8 @@ import butterknife.ButterKnife;
 public class LifeActivity extends AppCompatActivity {
 
     private static final int CELL_SIZE = 50;
+    private int rowCount;
+    private int columnCount;
 
     private Cell[][] cellMatrix;
 
@@ -27,8 +29,8 @@ public class LifeActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         Point size = getDisplaySize();
-        int rowCount = size.y / CELL_SIZE;
-        int columnCount = size.x / CELL_SIZE;
+        rowCount = size.y / CELL_SIZE;
+        columnCount = size.x / CELL_SIZE;
 
         cellMatrix = new Cell[rowCount][columnCount];
 
@@ -61,5 +63,36 @@ public class LifeActivity extends AppCompatActivity {
         Point size = new Point();
         display.getSize(size);
         return size;
+    }
+
+    private boolean decide(int rowPosition, int columnPosition) {
+        int neighbours = 0;
+
+        if (columnPosition > 0) {
+            if (cellMatrix[rowPosition][columnPosition - 1].isAlive)
+                neighbours++;
+
+            if (rowPosition > 0 && cellMatrix[rowPosition - 1][columnPosition - 1].isAlive)
+                neighbours++;
+
+            if (rowPosition < rowCount - 1 && cellMatrix[rowPosition + 1][columnPosition + 1].isAlive)
+                neighbours++;
+
+        }
+
+        if (columnPosition < columnCount - 1) {
+            if (cellMatrix[rowPosition][columnPosition + 1].isAlive)
+                neighbours++;
+            if (rowPosition > 0 && cellMatrix[rowPosition - 1][columnPosition + 1].isAlive)
+                neighbours++;
+            if (rowPosition < rowCount - 1 && cellMatrix[rowPosition + 1][columnPosition + 1].isAlive)
+                neighbours++;
+        }
+        if (rowPosition > 0 && cellMatrix[rowPosition - 1][columnPosition].isAlive)
+            neighbours++;
+        if (rowPosition < rowCount - 1 && cellMatrix[rowPosition + 1][columnPosition].isAlive)
+            neighbours++;
+
+        return neighbours == 3 || neighbours == 2;
     }
 }
