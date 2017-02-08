@@ -9,16 +9,21 @@ import android.view.Display;
 import android.widget.GridLayout;
 import android.widget.ImageView;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class LifeActivity extends AppCompatActivity {
 
     private static final int CELL_SIZE = 50;
-    private static final long ANIMATION_DELAY = 1000;
+    private static final long ANIMATION_PERIOD = 1000;
 
     private int rowCount;
     private int columnCount;
+
+    private Handler handler;
 
     private Cell[][] cellMatrix;
 
@@ -30,6 +35,7 @@ public class LifeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_life);
         ButterKnife.bind(this);
+        handler = new Handler();
 
         Point size = getDisplaySize();
         rowCount = size.y / CELL_SIZE;
@@ -94,22 +100,30 @@ public class LifeActivity extends AppCompatActivity {
     }
 
     private void animate() {
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
+        Timer timer = new Timer();
+        TimerTask timerTask = new TimerTask() {
             @Override
             public void run() {
-                for (int cellRowPosition = 0; cellRowPosition < rowCount; cellRowPosition++) {
-                    for (int cellColumnPosition = 0; cellColumnPosition < columnCount; cellColumnPosition++) {
-                        if (decide(cellRowPosition, cellColumnPosition)) {
-                            cellMatrix[cellRowPosition][cellColumnPosition].alive();
-                        } else {
-                            cellMatrix[cellRowPosition][cellColumnPosition].dead();
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        for (int cellRowPosition = 0; cellRowPosition < rowCount; cellRowPosition++) {
+                            for (int cellColumnPosition = 0; cellColumnPosition < columnCount; cellColumnPosition++) {
+                                if (decide(cellRowPosition, cellColumnPosition)) {
+                                    cellMatrix[cellRowPosition][cellColumnPosition].alive();
+                                } else {
+                                    cellMatrix[cellRowPosition][cellColumnPosition].dead();
+                                }
+                                gridLayout.removeView(cellMatrix[cellRowPosition][cellColumnPosition].getImageView());
+                                gridLayout.addView(cellMatrix[cellRowPosition][cellColumnPosition].getImageView());
+                            }
                         }
-                        gridLayout.addView(cellMatrix[cellRowPosition][cellColumnPosition].getImageView());
+
                     }
-                }
+                });
             }
-        }, ANIMATION_DELAY);
+        };
+        timer.scheduleAtFixedRate(timerTask, 0, ANIMATION_PERIOD);
     }
 
     private boolean decide(int rowPosition, int columnPosition) {
