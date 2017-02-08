@@ -3,7 +3,6 @@ package com.life;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Display;
 import android.widget.GridLayout;
@@ -15,8 +14,6 @@ import butterknife.ButterKnife;
 public class LifeActivity extends AppCompatActivity {
 
     private static final int CELL_SIZE = 50;
-
-    private ImageView[][] cellMatrix;
 
     @BindView(R.id.grid_layout)
     GridLayout gridLayout;
@@ -31,7 +28,7 @@ public class LifeActivity extends AppCompatActivity {
         int columnCount = size.x / CELL_SIZE;
         int rowCount = size.y / CELL_SIZE;
 
-        cellMatrix = new ImageView[columnCount][rowCount];
+        Cell[][] cellMatrix = new Cell[columnCount][rowCount];
 
         gridLayout.setColumnCount(columnCount);
         gridLayout.setRowCount(rowCount);
@@ -39,9 +36,6 @@ public class LifeActivity extends AppCompatActivity {
         for (int cellColumnPosition = 0; cellColumnPosition < columnCount; cellColumnPosition++) {
             for (int cellRowPosition = 0; cellRowPosition < rowCount; cellRowPosition++) {
                 ImageView imageView = new ImageView(this);
-                imageView.setBackgroundColor(ContextCompat.getColor(this,
-                        android.R.color.holo_green_light));
-
                 GridLayout.LayoutParams params = new GridLayout.LayoutParams();
                 params.height = CELL_SIZE;
                 params.width = CELL_SIZE;
@@ -51,8 +45,11 @@ public class LifeActivity extends AppCompatActivity {
                 params.bottomMargin = 2;
                 imageView.setLayoutParams(params);
 
+                Cell cell = new Cell(imageView);
+                cell.create();
+
                 gridLayout.addView(imageView);
-                cellMatrix[cellColumnPosition][cellRowPosition] = imageView;
+                cellMatrix[cellColumnPosition][cellRowPosition] = cell;
             }
         }
     }
