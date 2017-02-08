@@ -16,6 +16,8 @@ public class LifeActivity extends AppCompatActivity {
 
     private static final int CELL_SIZE = 50;
 
+    private ImageView[][] cellMatrix;
+
     @BindView(R.id.grid_layout)
     GridLayout gridLayout;
 
@@ -28,6 +30,8 @@ public class LifeActivity extends AppCompatActivity {
         Point size = getDisplaySize();
         int columnCount = size.x / CELL_SIZE;
         int rowCount = size.y / CELL_SIZE;
+
+        cellMatrix = new ImageView[columnCount][rowCount];
 
         gridLayout.setColumnCount(columnCount);
         gridLayout.setRowCount(rowCount);
@@ -48,6 +52,7 @@ public class LifeActivity extends AppCompatActivity {
                 imageView.setLayoutParams(params);
 
                 gridLayout.addView(imageView);
+                cellMatrix[cellColumnPosition][cellRowPosition] = imageView;
             }
         }
     }
