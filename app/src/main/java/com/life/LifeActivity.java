@@ -14,7 +14,7 @@ import butterknife.ButterKnife;
 
 public class LifeActivity extends AppCompatActivity {
 
-    private static final int GRID_SPAN = 10;
+    private static final int CELL_SIZE = 100;
 
     @BindView(R.id.grid_layout)
     GridLayout gridLayout;
@@ -25,22 +25,25 @@ public class LifeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_life);
         ButterKnife.bind(this);
 
-        gridLayout.setRowCount(GRID_SPAN);
-        gridLayout.setColumnCount(GRID_SPAN);
-
         Point size = getDisplaySize();
-        int cellSize = size.x / GRID_SPAN;
+        int columnCount = size.x / CELL_SIZE;
+        int rowCount = size.y / CELL_SIZE;
 
-        for (int cellPosition = 0; cellPosition < GRID_SPAN; cellPosition++) {
+        gridLayout.setColumnCount(columnCount);
+        gridLayout.setRowCount(rowCount);
+
+        for (int cellColumnPosition = 0; cellColumnPosition < columnCount; cellColumnPosition++) {
             ImageView imageView = new ImageView(this);
             imageView.setBackgroundColor(ContextCompat.getColor(this,
                     android.R.color.holo_green_light));
 
             GridLayout.LayoutParams params = new GridLayout.LayoutParams();
-            params.height = cellSize;
-            params.width = cellSize;
+            params.height = CELL_SIZE;
+            params.width = CELL_SIZE;
             params.leftMargin = 2;
             params.rightMargin = 2;
+            params.topMargin = 2;
+            params.bottomMargin = 2;
             imageView.setLayoutParams(params);
 
             gridLayout.addView(imageView);
