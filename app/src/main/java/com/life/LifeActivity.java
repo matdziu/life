@@ -14,6 +14,7 @@ import java.util.TimerTask;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class LifeActivity extends AppCompatActivity {
 
@@ -47,7 +48,11 @@ public class LifeActivity extends AppCompatActivity {
         gridLayout.setRowCount(rowCount);
 
         initState();
-//        animate();
+    }
+
+    @OnClick(R.id.fab_play)
+    public void onPlayButtonClicked() {
+        animate();
     }
 
     private Point getDisplaySize() {
