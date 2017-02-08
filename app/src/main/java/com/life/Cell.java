@@ -14,13 +14,11 @@ class Cell {
     }
 
     void alive() {
-        isAlive = true;
         imageView.setBackgroundColor(ContextCompat.getColor(imageView.getContext(),
                 android.R.color.holo_green_light));
     }
 
     void dead() {
-        isAlive = false;
         imageView.setBackgroundColor(ContextCompat.getColor(imageView.getContext(),
                 android.R.color.white));
     }

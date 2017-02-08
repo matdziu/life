@@ -19,7 +19,7 @@ import butterknife.OnClick;
 public class LifeActivity extends AppCompatActivity {
 
     private static final int CELL_SIZE = 50;
-    private static final long ANIMATION_PERIOD = 1000;
+    private static final long ANIMATION_PERIOD = 100;
 
     private int rowCount;
     private int columnCount;
@@ -48,6 +48,7 @@ public class LifeActivity extends AppCompatActivity {
         gridLayout.setRowCount(rowCount);
 
         initState();
+        refreshView();
     }
 
     @OnClick(R.id.fab_play)
@@ -86,19 +87,19 @@ public class LifeActivity extends AppCompatActivity {
 
                 // initial state - glider
                 if (cellRowPosition == middleRow && cellColumnPosition == middleColumn) {
-                    cell.alive();
+                    cell.isAlive = true;
                 }
                 if (cellRowPosition == middleRow + 1 && cellColumnPosition == middleColumn) {
-                    cell.alive();
+                    cell.isAlive = true;
                 }
                 if (cellRowPosition == middleRow + 2 && cellColumnPosition == middleColumn) {
-                    cell.alive();
+                    cell.isAlive = true;
                 }
                 if (cellRowPosition == middleRow + 2 && cellColumnPosition == middleColumn - 1) {
-                    cell.alive();
+                    cell.isAlive = true;
                 }
                 if (cellRowPosition == middleRow + 1 && cellColumnPosition == middleColumn - 2) {
-                    cell.alive();
+                    cell.isAlive = true;
                 }
 
                 gridLayout.addView(cellMatrix[cellRowPosition][cellColumnPosition].getImageView());
@@ -116,15 +117,17 @@ public class LifeActivity extends AppCompatActivity {
                     public void run() {
                         for (int cellRowPosition = 0; cellRowPosition < rowCount; cellRowPosition++) {
                             for (int cellColumnPosition = 0; cellColumnPosition < columnCount; cellColumnPosition++) {
-                                if (decide(cellRowPosition, cellColumnPosition)) {
-                                    cellMatrix[cellRowPosition][cellColumnPosition].alive();
-                                } else {
-                                    cellMatrix[cellRowPosition][cellColumnPosition].dead();
-                                }
+                                cellMatrix[cellRowPosition][cellColumnPosition].willBeAlive
+                                        = decide(cellRowPosition, cellColumnPosition);
                             }
                         }
-                        animate();
-
+                        for (int cellRowPosition = 0; cellRowPosition < rowCount; cellRowPosition++) {
+                            for (int cellColumnPosition = 0; cellColumnPosition < columnCount; cellColumnPosition++) {
+                                cellMatrix[cellRowPosition][cellColumnPosition].isAlive
+                                        = cellMatrix[cellRowPosition][cellColumnPosition].willBeAlive;
+                            }
+                        }
+                        refreshView();
                     }
                 });
             }
@@ -132,11 +135,14 @@ public class LifeActivity extends AppCompatActivity {
         timer.scheduleAtFixedRate(timerTask, 0, ANIMATION_PERIOD);
     }
 
-    private void animate() {
+    private void refreshView() {
         for (int cellRowPosition = 0; cellRowPosition < rowCount; cellRowPosition++) {
             for (int cellColumnPosition = 0; cellColumnPosition < columnCount; cellColumnPosition++) {
-                gridLayout.removeView(cellMatrix[cellRowPosition][cellColumnPosition].getImageView());
-                gridLayout.addView(cellMatrix[cellRowPosition][cellColumnPosition].getImageView());
+                if (cellMatrix[cellRowPosition][cellColumnPosition].isAlive) {
+                    cellMatrix[cellRowPosition][cellColumnPosition].alive();
+                } else {
+                    cellMatrix[cellRowPosition][cellColumnPosition].dead();
+                }
             }
         }
     }
@@ -169,6 +175,6 @@ public class LifeActivity extends AppCompatActivity {
         if (rowPosition < rowCount - 1 && cellMatrix[rowPosition + 1][columnPosition].isAlive)
             neighbours++;
 
-        return neighbours == 3 || neighbours == 2;
+        return neighbours == 3 || cellMatrix[rowPosition][columnPosition].isAlive && neighbours == 2;
     }
 }
