@@ -7,6 +7,7 @@ class Cell {
 
     private ImageView imageView;
     boolean isAlive;
+    boolean willBeAlive;
 
     Cell(ImageView imageView) {
         this.imageView = imageView;

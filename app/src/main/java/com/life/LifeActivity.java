@@ -52,7 +52,7 @@ public class LifeActivity extends AppCompatActivity {
 
     @OnClick(R.id.fab_play)
     public void onPlayButtonClicked() {
-        animate();
+        calculate();
     }
 
     private Point getDisplaySize() {
@@ -106,7 +106,7 @@ public class LifeActivity extends AppCompatActivity {
         }
     }
 
-    private void animate() {
+    private void calculate() {
         Timer timer = new Timer();
         TimerTask timerTask = new TimerTask() {
             @Override
@@ -121,16 +121,24 @@ public class LifeActivity extends AppCompatActivity {
                                 } else {
                                     cellMatrix[cellRowPosition][cellColumnPosition].dead();
                                 }
-                                gridLayout.removeView(cellMatrix[cellRowPosition][cellColumnPosition].getImageView());
-                                gridLayout.addView(cellMatrix[cellRowPosition][cellColumnPosition].getImageView());
                             }
                         }
+                        animate();
 
                     }
                 });
             }
         };
         timer.scheduleAtFixedRate(timerTask, 0, ANIMATION_PERIOD);
+    }
+
+    private void animate() {
+        for (int cellRowPosition = 0; cellRowPosition < rowCount; cellRowPosition++) {
+            for (int cellColumnPosition = 0; cellColumnPosition < columnCount; cellColumnPosition++) {
+                gridLayout.removeView(cellMatrix[cellRowPosition][cellColumnPosition].getImageView());
+                gridLayout.addView(cellMatrix[cellRowPosition][cellColumnPosition].getImageView());
+            }
+        }
     }
 
     private boolean decide(int rowPosition, int columnPosition) {
