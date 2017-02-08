@@ -12,15 +12,19 @@ class Cell {
         this.imageView = imageView;
     }
 
-    void create() {
+    void alive() {
         isAlive = true;
         imageView.setBackgroundColor(ContextCompat.getColor(imageView.getContext(),
                 android.R.color.holo_green_light));
     }
 
-    void delete() {
+    void dead() {
         isAlive = false;
         imageView.setBackgroundColor(ContextCompat.getColor(imageView.getContext(),
                 android.R.color.white));
+    }
+
+    ImageView getImageView() {
+        return imageView;
     }
 }

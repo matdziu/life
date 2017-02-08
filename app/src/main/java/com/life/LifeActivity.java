@@ -14,6 +14,7 @@ import butterknife.ButterKnife;
 public class LifeActivity extends AppCompatActivity {
 
     private static final int CELL_SIZE = 50;
+
     private int rowCount;
     private int columnCount;
 
@@ -37,25 +38,8 @@ public class LifeActivity extends AppCompatActivity {
         gridLayout.setColumnCount(columnCount);
         gridLayout.setRowCount(rowCount);
 
-        for (int cellRowPosition = 0; cellRowPosition < rowCount; cellRowPosition++) {
-            for (int cellColumnPosition = 0; cellColumnPosition < columnCount; cellColumnPosition++) {
-                ImageView imageView = new ImageView(this);
-                GridLayout.LayoutParams params = new GridLayout.LayoutParams();
-                params.height = CELL_SIZE;
-                params.width = CELL_SIZE;
-                params.leftMargin = 2;
-                params.rightMargin = 2;
-                params.topMargin = 2;
-                params.bottomMargin = 2;
-                imageView.setLayoutParams(params);
-
-                Cell cell = new Cell(imageView);
-                cell.create();
-
-                gridLayout.addView(imageView);
-                cellMatrix[cellRowPosition][cellColumnPosition] = cell;
-            }
-        }
+        initCellMatrix();
+        animate();
     }
 
     private Point getDisplaySize() {
@@ -63,6 +47,56 @@ public class LifeActivity extends AppCompatActivity {
         Point size = new Point();
         display.getSize(size);
         return size;
+    }
+
+    private Cell createCell() {
+        ImageView imageView = new ImageView(this);
+        GridLayout.LayoutParams params = new GridLayout.LayoutParams();
+        params.height = CELL_SIZE;
+        params.width = CELL_SIZE;
+        params.leftMargin = 2;
+        params.rightMargin = 2;
+        params.topMargin = 2;
+        params.bottomMargin = 2;
+        imageView.setLayoutParams(params);
+        return new Cell(imageView);
+    }
+
+    private void initCellMatrix() {
+        int middleRow = rowCount / 2;
+        int middleColumn = columnCount / 2;
+        for (int cellRowPosition = 0; cellRowPosition < rowCount; cellRowPosition++) {
+            for (int cellColumnPosition = 0; cellColumnPosition < columnCount; cellColumnPosition++) {
+                Cell cell = createCell();
+                cellMatrix[cellRowPosition][cellColumnPosition] = cell;
+
+
+                // initial state - glider
+                if (cellRowPosition == middleRow && cellColumnPosition == middleColumn) {
+                    cell.alive();
+                }
+                if (cellRowPosition == middleRow + 1 && cellColumnPosition == middleColumn) {
+                    cell.alive();
+                }
+                if (cellRowPosition == middleRow + 2 && cellColumnPosition == middleColumn) {
+                    cell.alive();
+                }
+                if (cellRowPosition == middleRow + 2 && cellColumnPosition == middleColumn - 1) {
+                    cell.alive();
+                }
+                if (cellRowPosition == middleRow + 1 && cellColumnPosition == middleColumn - 2) {
+                    cell.alive();
+                }
+            }
+        }
+    }
+
+    private void animate() {
+        for (int cellRowPosition = 0; cellRowPosition < rowCount; cellRowPosition++) {
+            for (int cellColumnPosition = 0; cellColumnPosition < columnCount; cellColumnPosition++) {
+                gridLayout.addView(cellMatrix[cellRowPosition][cellColumnPosition].getImageView());
+            }
+        }
     }
 
     private boolean decide(int rowPosition, int columnPosition) {
@@ -75,7 +109,7 @@ public class LifeActivity extends AppCompatActivity {
             if (rowPosition > 0 && cellMatrix[rowPosition - 1][columnPosition - 1].isAlive)
                 neighbours++;
 
-            if (rowPosition < rowCount - 1 && cellMatrix[rowPosition + 1][columnPosition + 1].isAlive)
+            if (rowPosition < rowCount - 1 && cellMatrix[rowPosition + 1][columnPosition - 1].isAlive)
                 neighbours++;
 
         }
