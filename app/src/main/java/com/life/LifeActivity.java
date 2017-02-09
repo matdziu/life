@@ -4,6 +4,7 @@ import android.graphics.Point;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Display;
 import android.widget.GridLayout;
@@ -26,11 +27,14 @@ public class LifeActivity extends AppCompatActivity {
     public static boolean isPlaying;
 
     private Handler handler;
-
     private Cell[][] cellMatrix;
+    private TimerTask timerTask;
 
     @BindView(R.id.grid_layout)
     GridLayout gridLayout;
+
+    @BindView(R.id.fab_play)
+    FloatingActionButton fabPlay;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -55,9 +59,15 @@ public class LifeActivity extends AppCompatActivity {
     @OnClick(R.id.fab_play)
     public void onPlayButtonClicked() {
         if (!isPlaying) {
+            fabPlay.setImageResource(R.drawable.ic_stop);
             isPlaying = true;
             refreshView();
             calculate();
+        } else {
+            fabPlay.setImageResource(R.drawable.ic_play);
+            isPlaying = false;
+            deInit();
+            refreshView();
         }
     }
 
@@ -91,9 +101,18 @@ public class LifeActivity extends AppCompatActivity {
         }
     }
 
+    private void deInit() {
+        timerTask.cancel();
+        for (int cellRowPosition = 0; cellRowPosition < rowCount; cellRowPosition++) {
+            for (int cellColumnPosition = 0; cellColumnPosition < columnCount; cellColumnPosition++) {
+                cellMatrix[cellRowPosition][cellColumnPosition].isAlive = false;
+            }
+        }
+    }
+
     private void calculate() {
         Timer timer = new Timer();
-        TimerTask timerTask = new TimerTask() {
+        timerTask = new TimerTask() {
             @Override
             public void run() {
                 handler.post(new Runnable() {

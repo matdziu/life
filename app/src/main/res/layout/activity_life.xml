@@ -18,6 +18,7 @@
         android:layout_alignParentEnd="true"
         android:layout_marginBottom="24dp"
         android:layout_marginEnd="24dp"
+        android:src="@drawable/ic_play"
         app:backgroundTint="@android:color/holo_green_light"
         app:pressedTranslationZ="10dp" />
 
