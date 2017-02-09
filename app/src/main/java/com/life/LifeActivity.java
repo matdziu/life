@@ -53,6 +53,7 @@ public class LifeActivity extends AppCompatActivity {
 
     @OnClick(R.id.fab_play)
     public void onPlayButtonClicked() {
+        refreshView();
         calculate();
     }
 

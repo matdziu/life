@@ -1,6 +1,7 @@
 package com.life;
 
 import android.support.v4.content.ContextCompat;
+import android.view.View;
 import android.widget.ImageView;
 
 class Cell {
@@ -11,6 +12,18 @@ class Cell {
 
     Cell(ImageView imageView) {
         this.imageView = imageView;
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isAlive) {
+                    dead();
+                    isAlive = false;
+                } else {
+                    alive();
+                    isAlive = true;
+                }
+            }
+        });
     }
 
     void alive() {
