@@ -4,6 +4,8 @@ import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.ImageView;
 
+import static com.life.LifeActivity.isPlaying;
+
 class Cell {
 
     private ImageView imageView;
@@ -15,12 +17,14 @@ class Cell {
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (isAlive) {
-                    dead();
-                    isAlive = false;
-                } else {
-                    alive();
-                    isAlive = true;
+                if (!isPlaying) {
+                    if (isAlive) {
+                        dead();
+                        isAlive = false;
+                    } else {
+                        alive();
+                        isAlive = true;
+                    }
                 }
             }
         });

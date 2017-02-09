@@ -23,6 +23,7 @@ public class LifeActivity extends AppCompatActivity {
 
     private int rowCount;
     private int columnCount;
+    public static boolean isPlaying;
 
     private Handler handler;
 
@@ -53,8 +54,11 @@ public class LifeActivity extends AppCompatActivity {
 
     @OnClick(R.id.fab_play)
     public void onPlayButtonClicked() {
-        refreshView();
-        calculate();
+        if (!isPlaying) {
+            isPlaying = true;
+            refreshView();
+            calculate();
+        }
     }
 
     private Point getDisplaySize() {
