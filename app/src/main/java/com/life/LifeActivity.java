@@ -78,31 +78,10 @@ public class LifeActivity extends AppCompatActivity {
     }
 
     private void initState() {
-        int middleRow = rowCount / 2;
-        int middleColumn = columnCount / 2;
         for (int cellRowPosition = 0; cellRowPosition < rowCount; cellRowPosition++) {
             for (int cellColumnPosition = 0; cellColumnPosition < columnCount; cellColumnPosition++) {
                 Cell cell = createCell();
                 cellMatrix[cellRowPosition][cellColumnPosition] = cell;
-
-
-                // initial state - glider
-                if (cellRowPosition == middleRow && cellColumnPosition == middleColumn) {
-                    cell.isAlive = true;
-                }
-                if (cellRowPosition == middleRow + 1 && cellColumnPosition == middleColumn) {
-                    cell.isAlive = true;
-                }
-                if (cellRowPosition == middleRow + 2 && cellColumnPosition == middleColumn) {
-                    cell.isAlive = true;
-                }
-                if (cellRowPosition == middleRow + 2 && cellColumnPosition == middleColumn - 1) {
-                    cell.isAlive = true;
-                }
-                if (cellRowPosition == middleRow + 1 && cellColumnPosition == middleColumn - 2) {
-                    cell.isAlive = true;
-                }
-
                 gridLayout.addView(cellMatrix[cellRowPosition][cellColumnPosition].getImageView());
             }
         }
